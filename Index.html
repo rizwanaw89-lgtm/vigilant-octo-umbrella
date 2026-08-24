@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>J's Colourful Calculator</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ff9a9e, #a18cd1, #6dd5ed);
+    }
+
+    .calculator {
+      width: 330px;
+      padding: 20px;
+      border-radius: 25px;
+      background: rgba(255, 255, 255, 0.22);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+      backdrop-filter: blur(12px);
+    }
+
+    .title {
+      text-align: center;
+      color: white;
+      margin-bottom: 15px;
+      font-size: 22px;
+    }
+
+    #display {
+      width: 100%;
+      height: 75px;
+      border: none;
+      outline: none;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      padding: 10px;
+      text-align: right;
+      font-size: 30px;
+      background: rgba(255,255,255,0.9);
+      color: #333;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    button {
+      height: 60px;
+      border: none;
+      border-radius: 15px;
+      font-size: 21px;
+      font-weight: bold;
+      cursor: pointer;
+      background: #ffffff;
+      color: #333;
+      transition: 0.15s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    .operator {
+      background: #c084fc;
+      color: white;
+    }
+
+    .clear {
+      background: #ff6b81;
+      color: white;
+    }
+
+    .equal {
+      background: #00c9a7;
+      color: white;
+      grid-column: span 2;
+    }
+
+    .zero {
+      grid-column: span 2;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="calculator">
+
+    <div class="title">✨ J's Calculator ✨</div>
+
+    <input type="text" id="display" value="0" readonly>
+
+    <div class="buttons">
+
+      <button class="clear" onclick="clearDisplay()">AC</button>
+      <button onclick="deleteLast()">⌫</button>
+      <button class="operator" onclick="addValue('%')">%</button>
+      <button class="operator" onclick="addValue('/')">÷</button>
+
+      <button onclick="addValue('7')">7</button>
+      <button onclick="addValue('8')">8</button>
+      <button onclick="addValue('9')">9</button>
+      <button class="operator" onclick="addValue('*')">×</button>
+
+      <button onclick="addValue('4')">4</button>
+      <button onclick="addValue('5')">5</button>
+      <button onclick="addValue('6')">6</button>
+      <button class="operator" onclick="addValue('-')">−</button>
+
+      <button onclick="addValue('1')">1</button>
+      <button onclick="addValue('2')">2</button>
+      <button onclick="addValue('3')">3</button>
+      <button class="operator" onclick="addValue('+')">+</button>
+
+      <button class="zero" onclick="addValue('0')">0</button>
+      <button onclick="addValue('.')">.</button>
+      <button class="equal" onclick="calculate()">=</button>
+
+    </div>
+  </div>
+
+  <script>
+    const display = document.getElementById("display");
+
+    function addValue(value) {
+      if (display.value === "0" || display.value === "Error") {
+        display.value = value;
+      } else {
+        display.value += value;
+      }
+    }
+
+    function clearDisplay() {
+      display.value = "0";
+    }
+
+    function deleteLast() {
+      if (display.value.length <= 1 || display.value === "Error") {
+        display.value = "0";
+      } else {
+        display.value = display.value.slice(0, -1);
+      }
+    }
+
+    function calculate() {
+      try {
+        let expression = display.value;
+
+        if (!/[0-9)]$/.test(expression)) {
+          return;
+        }
+
+        display.value = Function(
+          '"use strict"; return (' + expression + ')'
+        )();
+      } catch {
+        display.value = "Error";
+      }
+    }
+  </script>
+
+</body>
+</html>
